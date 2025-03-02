@@ -211,7 +211,7 @@ TCP（Transmission Control Protocol）：在不可靠的网络上为host-to-host
 5. SYN,ACK; Ack=X+1,Seq=Y
 6. ACK; Ack=Y+1,Seq=X+1
 
-![](/img/network/three_times_handshak.png)
+![](/img/network/three_times_handshake.png)
 
 
 
