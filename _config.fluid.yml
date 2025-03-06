@@ -1,5 +1,7 @@
 # 配置参考：https://github.com/fluid-dev/hexo-theme-fluid/blob/master/_config.yml
 
+favicon: /img/blog.svg
+
 navbar:
   blog_title: 极地之旅
   menu:
@@ -17,7 +19,7 @@ navbar:
     #       ],
     #   }
     - { key: "about", link: "/about/", icon: "iconfont icon-user-fill" }
-
+    - { key: "资源", link: "/resource/", icon: "iconfont icon-bookmark-fill" }
 
 index:
   banner_img_height: 70
