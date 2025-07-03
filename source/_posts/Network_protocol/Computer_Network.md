@@ -9,10 +9,10 @@ tags:
 
 ![画板](/img/network/network_mind.jpeg)
 
-
-
 ### 网络层次划分
+
 #### OSI七层参考网络模型
+
 1. 应用层：产生数据
 2. 表示层：对应用层来的数据进行压缩，解压缩，加密，解密（翻译官）
 3. 会话层：数据传输之前建立一个会话，传输过程中维持一个会话，传输结束终止这个会话
@@ -27,6 +27,7 @@ tags:
 7. 物理层：定义一些设备的接口以及传输速率
 
 #### TCP/IP五层网络模型
+
 1. 应用层：为操作系统或应用程序提供访问应用的接口，基本单位为报文
 2. 传输层：提供端对端的数据传输（网关）
 3. 网络层：路由选择，基本单位为IP数据报（路由器）
@@ -46,11 +47,13 @@ tags:
 它可以学习以太网数据帧中的源MAC地址，交换机可以将学习到的MAC地址，记录到MAC地址表里面，MAC地址表里面会记录MAC地址是从哪个接口发来的。
 
 > 交换机三种处理数据帧的方式： 
+
 1. 收到未知单播帧，进行泛洪（发送到其他所有接口）
 2. 收到已知单播帧，进行转发
 3. 收到错误数据帧，进行丢弃（如果交换机从一个接口收到一份数据，又要立刻从该接口发出去，就会丢弃）
 
 #### 集线器 
+
 1. 信号放大，解决网线只能传输100m的问题
 2. 无脑广播，从一个接口收到数据，会复制N份，从所有其他接口发送出去
 3. 半双工，同一时间只能接收数据或发送数据，会使网络造成冲突，所波及的范围叫做冲突域
@@ -60,17 +63,23 @@ tags:
 4. 无线AP就是hub
 
 #### 网卡
+
 当一个数据包到达一台计算机时，网卡会检查该数据包的目的MAC地址，以判断是否是发往本机的。如果目的MAC地址与网卡MAC地址匹配，或者该数据是一个广播包，网卡就会接受该数据包，并将其传递给内核进一步处理，否则就会丢弃，但是，有一种特殊模式叫做“混杂模式”，这种模式下，网卡会接收所有到达的数据包，通常用于网络监控和抓包分析等场景
 
 ### 网络协议
+
 #### 以太网协议
+
 ##### 以太网帧数据结构
+
 前导码（8字节），目的MAC地址（6字节），源MAC地址（6字节），上层协议类型（2字节），数据（46-1500字节），帧校验码FCS（4字节）
 
 ![](/img/network/ethernet_struct.png)
 
 #### IP协议
+
 ##### IP协议的特点
+
 1. IP协议提供了数据报在源和目的地之间的透明传输机制
 2. IP协议提供了对长的数据报的分段和重组机制，每个小的数据报被单独封装成以太网帧进行传输，以太网不直接处理大数据包
 3. IP协议定义了在互联网的主机间传输数据报的机制，没有提供端对端的数据可靠性、流量控制等机制
@@ -84,6 +93,7 @@ tags:
     4. 报头校验：用来验证数据报，如果校验失败，则丢弃报文
 
 ##### IP包头部
+
 （20固定+40可选）
 
 1. 版本号（Version）：4bit，标识目前采用的IP协议的版本号，一般值为0100（IPV4）0110（IPV6）
@@ -119,9 +129,11 @@ tags:
 12. 选项字段（Options）：变长的选项字段
 
 ##### IPv4头数据结构
+
 ![](/img/network/ipv4_struct.png)
 
 ##### IP地址的分类
+
 1. 网络地址：IP地址由网络号（包括子网号）和主机号组成，网络地址的主机号全为0，网络地址代表着整个网络。
 2. 广播地址：广播地址通常称为直接广播地址，是为了区分受限广播地址；广播地址与网络地址的主机号正好相反，广播地址中，主机号全为1，当向某个网络的广播地址发送消息时，该网络的所有主机都能收到该广播消息。（本机没有IP时，使用本地广播地址：255.255.255.255）
 3. 组播地址：D类地址就是组播地址。
@@ -151,9 +163,11 @@ IP地址管理划分的方式
 
 
 #### TCP协议
+
 TCP（Transmission Control Protocol）：在不可靠的网络上为host-to-host的通信双方提供可靠的逻辑链路
 
 ##### TCP协议的特点
+
 1. 基本数据传输：连接是双向通信的，字节流，字节封装成包，TCP自己决定何时停止和发送数据，如果需要确保已经提交的数据及时发送，可以使用push功能
 2. 可靠性：TCP通过序号、确认、重传机制确保数据的可靠。TCP必须是可以恢复以下数据：受损的、丢失的、重复的、乱序的，每一个字节一个编号，接收者确认，如果确认超时未收到应该重发，接受者根据编号来排序错序的报文和去除重复的报文，受损的数据可以通过报文段的校验码来控制，丢弃受损的数据，超时重发
 3. 流量控制：TCP使用滑动窗口机制进行流控制，以便适应网络的状况和接收方的处理能力。接受者控制发送者数据发送。窗口机制，每个ACK报文段返回一个窗口值，确认以后最多能发送的字节数
@@ -163,6 +177,7 @@ TCP（Transmission Control Protocol）：在不可靠的网络上为host-to-host
 7. 分段：TCP在发送大数据流时，会将数据分段，每个段的大小通常不会超过MTU，以避免在网络层发生分片
 
 ##### TCP报文头部
+
 （20固定+40可选）
 
 1. 源端口：16bit，范围0-65535
@@ -183,13 +198,10 @@ TCP（Transmission Control Protocol）：在不可靠的网络上为host-to-host
 10. 紧急指针字段：16bit，紧急指针指出本报文段中的紧急数据的最后一个字节序号
 11. 选项字段：长度可变，TCP首部可以有多达40字节的可选信息，用于把附加信息传递给终点，或用来对齐其他选项，这部分最多包含40字节，因为TCP头部最长是60字节，其中包含前面讨论的20字节固定部分
 
-
-
 ![](/img/network/tcp_struct.png)
 
-
-
 ##### TCP连接的状态
+
 1. LISTEN：等待远程的TCP连接请求
 2. SYN-SEND：发送了建立连接的请求，等待确认消息
 3. SYN-RECIVEVED：收到对方的建立连接请求，且回复了建立连接的请求，等待对方确认
@@ -201,9 +213,8 @@ TCP（Transmission Control Protocol）：在不可靠的网络上为host-to-host
 9. TIME-WAIT：主动关闭连接的一方收到对方发送的对方关闭连接请求的确认消息后，等待2MSL以确保对方接收到ACK包，最后回到CLOSED状态，释放网络资源
 10. CLOSED：关闭状态
 
-
-
 ##### 三次握手
+
 1. 第一次握手：客户端向服务端发送连接请求包，标识位SYN=1，序号Seq=X
 2. 第二次握手：服务器收到客户端发过来的报文，由SYN=1知道客户端要建立连接，向客户端发送一个SYN和ACK都置为1的TCP报文，设置初始序号Seq=Y，将确认序号Ack设置为客户端序号加1（Ack=X+1）
 3. 第三次握手：客户端收到服务端发来的包后，检查确认序号Ack是否正确，若正确，客户端再次发送确认包ACK=1，Seq=X+1，Ack=Y+1，服务端收到确认序号则表示连接建立成功
@@ -213,9 +224,8 @@ TCP（Transmission Control Protocol）：在不可靠的网络上为host-to-host
 
 ![](/img/network/three_times_handshake.png)
 
-
-
 ##### 四次挥手
+
 1. 第一次挥手：服务器端发出FIN、ACK，用来断开服务器到客户端的数据传送，进入FIN-WAIT-1状态
 2. 第二次挥手：客户端收到服务器端的FIN后，发送ACK确认报文，进入CLOSE-WAIT状态
 3. 第三次挥手：客户端发出FIN、ACK，用来断开客户端到服务器端的数据 传送，进入LAST-ACK状态
@@ -237,14 +247,14 @@ TCP（Transmission Control Protocol）：在不可靠的网络上为host-to-host
 
 ![](/img/network/four_waves.png)
 
-
-
 ##### TCP状态机
+
 ![](/img/network/tcp_state.png)
 
 
 
 ##### 可靠传输
+
 为了保证不丢包。对于发送的包都要进行应答，但是这个应答也不是一个一个来的，而是会应答某个之前的ID，表示都收到了，这种模式称为累计确认或者累计应答（cumulative acknowledgment）
 
 自适应重传算法：TCP通过采样RTT（往返时延）的时间，然后进行加权平均，算出一个值，而且这个值还是要不断变化的。
@@ -252,25 +262,28 @@ TCP（Transmission Control Protocol）：在不可靠的网络上为host-to-host
 快速重传算法：当发送方收到3个连续的重复确认时，它会立即重传丢失的报文段，而不需要等待重传计时器超时。这样一来，快速重传算法能够在较短时间内检测到报文段丢失并触发重传，提高了数据传输的效率
 
 ##### 流量控制
+
 通过滑动窗口算法实现流量控制，滑动窗口可以动态调整发送方和接收方的数据传输速率，避免接收方因处理能力不足而被发送方发送的大量数据淹没
 
 ##### 拥塞控制
+
 TCP 的拥塞控制主要来避免两种现象，包丢失和超时重传。一旦出现了这些现象就说明，发送速度太快了，要慢一点。
 
 BBR拥塞算法：BBR的主要思想是利用瓶颈链路的带宽和往返时间（RTT）来调整发送速率，而不是依赖丢包信号。BBR通过测量链路的带宽和最小往返时间来估算网络的传输能力，然后根据这些信息调整发送速率。
 
-
-
 #### UDP协议
+
 UDP（User Datagram Protocol）：用户数据报协议，面向数据报的传输层协议，不建立连接，不提供可靠性、传输速度快
 
 ##### UDP的特点
+
 1. 无连接无状态：UDP是一种无连接、无状态的协议，它不会对数据包进行分段或组装，如果应用层数据大于MTU，那么网络层会发生分片，UDP协议在传输数据前不需要建立连接
 2. 尽最大努力交付的：也就是说UDP协议无法保证数据能够准确交付到目的主机
 3. 面向报文的：UDP协议将应用层传输下来的数据封装在一个UDP包中，不进行拆分或合并，因此，传输层在收到对方UDP包后，会去掉首部后，将数据原封不动的交给应用进程
 4. 没有拥塞控制：UDP协议的发送速率不受网络的拥塞度影响
 
 ##### UDP报文头部
+
 （8字节）
 
     1. 源端口：16bit，范围0-65535
@@ -280,12 +293,12 @@ UDP（User Datagram Protocol）：用户数据报协议，面向数据报的传�
 
 ![](/img/network/udp_struct.png)
 
-
-
 #### ICMP协议
+
 ICMP是啥；ICMP（互联网控制报文协议），是一个介于网络层和传输层之间的一个协议，主要功能是传输网络诊断信息
 
 ##### ICMP头部
+
 1. 类型type：1字节，表示较大范围类型分类的ICMP报文
     1. 0：ping应答
     2. 3：目的不可达
@@ -310,9 +323,8 @@ ICMP是啥；ICMP（互联网控制报文协议），是一个介于网络层和
 2. 代码code：1字节，表示较小范围类型分类的ICMP报文
 3. 校验和checksum：2字节，校验头部加数据部分
 
-
-
 ##### 相关命令
+
 1. 路径追踪命令：traceroute 
     1. 确定通信双方路径上经过的路由器设备
         1. traceroute向目的地发送IP包，刚开始的时候将TTL设置为1，当经过第一个路由器时，TTL-1=0引发超时错误，第一个路由器回复ICMP超时报文，源主机就可以知道第一个路由器的信息，TTL=1的报文会重复请求三次
@@ -322,22 +334,18 @@ ICMP是啥；ICMP（互联网控制报文协议），是一个介于网络层和
 2. ping命令：ping
     1. ping包从一台主机发送到另一台主机，包括请求包和应答包，其中，如果MAC地址未知的话，需要先发出ARP请求拿到，然后再进行封装
 
-
-
 #### 路由协议
-##### 路由选择
 
+##### 路由选择
 
 距离矢量路由协议：RIPv2，把自己的路由表发送给邻居，收敛速度慢
 
 链路状态路由协议：OSPF，把自己的链路状态通告（LSA）发送给邻居，收敛速度快
 
 
-
 RIPv2：基于跳数选择路由，传递路由表，不计算带宽
 
 OSPF：开放式最短路径协议，传递接口信息，可扩展性好，每一个路由器都有一个完整的拓扑，网络发生变化时能很快响应
-
 
 
 两条目的网络相同的路由：选AD值最小的，如果AD值一样选择Metric小的，都一样则负载均衡
@@ -347,6 +355,7 @@ OSPF：开放式最短路径协议，传递接口信息，可扩展性好，每�
 mac地址学习：一个mac地址只能对应一个接口，后学习到的会覆盖先学习到的
 
 ##### 生成树协议（STP）
+
 通过算法算出来阻塞哪个接口，进而消除环路，而且，当正常的链路断掉之后，阻塞的接口会自动打开
 
 PVSTP+：思科私有协议，每个vlan一个stp，解决vlan次优问题
@@ -375,9 +384,8 @@ PVSTP+：思科私有协议，每个vlan一个stp，解决vlan次优问题
     4. learning：该状态是学习MAC地址的状态
     5. forwarding：转发状态（只有处在该状态才能转发数据）
 
-
-
 #### ARP协议
+
 Address Resolution Protocol 地址解析协议
 
 是一种在TCP/IP网络中用于将网络层的IP地址映射到数据链路层的物理地址的协议。它通常运行在本地网络的所有设备上
@@ -388,11 +396,8 @@ Address Resolution Protocol 地址解析协议
 4. ARP欺骗：ARP欺骗时一种攻击方法，它通过发送虚假的ARP响应来欺骗其他设备，攻击者可以伪装自己的MAC地址，使其他设备将数据发送到攻击者的设备上，从而进行窃听或者篡改网络流量，为防止ARP欺骗，网络管理员可以使用静态ARP表或者动态ARP检测等方法进行防范
 5. 代理ARP：当电脑没有网关时，ARP请求目标跨网段，ARP直接询问目标IP对应的MAC地址，网关设备收到ARP请求，会用自己的MAC地址返回给请求者，这便是Proxy ARP；当电脑有网关时，ARP只需询问网关IP对应的MAC地址，采用正常ARP；无论正常ARP还是代理ARP，电脑最终都拿到同一个目标MAC地址，即网关MAC
 
-
-
-
-
 ### 名词解释
+
 1. MAC地址：以太网的数据帧中，目的MAC地址决定了该数据帧是单播还是多播
     1. 如果MAC地址中，第8个bit为0，那么这就是一个单播的MAC地址
     2. 如果第8个bit为1，就是一个多播的MAC地址，全部MAC地址为1是广播，不全为1是组播
@@ -415,19 +420,18 @@ Address Resolution Protocol 地址解析协议
     1. VXLAN是一种基于IP网络构建逻辑拓扑，采用“MAC in UDP”封装方式的二层VPN技术，VXLAN能够为分散的物理站点提供二层和三层互联，并能为不同用户提供业务隔离服务
     2. VXLAN建立在原来的IP网络之上，只要三层可达的网络就能部署VXLAN，在每个端点都有一个vtep负责vxlan协议报文的封包和解包，也就是在虚拟报文上封装vtep通信的报文头部
 
-
-
 ### EVE-NG
+
 #### eve-ng安装
+
 1. 导入EVE-student_2.0.3.ova，win和mac共用
 2. 安装SecureCRT（也可以用其他，需要配置启动命令为telnet）和wireshark，用于配置路由器和抓包
 3. 安装RCDefaultApp-2.1.X.dmg，会在mac设置的菜单栏添加一个预设应用程序，将URLs中的telnet设置为SecureCRT
 4. 安装UNL_WiresharkV2，用于连接eve和wireshark
 5. 在eve-web上添加路由器抓包试试吧！
 
-
-
 ##### 静态IP配置
+
 ```plain
 cat /etc/network/interfaces 
 auto eth0 
@@ -446,9 +450,8 @@ systemctl restart networking
 参考：https://codeantenna.com/a/8NHnblhWfx
 ```
 
-
-
 ##### 镜像导入
+
 1. 上传镜像到特定目录（镜像保存目录：/opt/unetlab/addons/ ）
     1. /opt/unetlab/addons/dynamips：Dynamips镜像保存目录
     2. /opt/unetlab/addons/iol：iol镜像保存目录
@@ -462,10 +465,8 @@ systemctl restart networking
 | --- | --- | --- |
 | linux-centos-8/9-stream | vnc | user/Test123 |
 
-
-
-
 ##### 资源列表
+
 1. eve 镜像列表：[https://www.eve-ng.net/index.php/documentation/howtos/howto-add-cisco-iol-ios-on-linux/](https://www.eve-ng.net/index.php/documentation/howtos/howto-add-cisco-iol-ios-on-linux/)
 2. eve cisco iol 镜像下载：
     1. [http://dl.nextadmin.net/dl/EVE-NG-image/iol/bin/](http://dl.nextadmin.net/dl/EVE-NG-image/iol/bin/)
@@ -475,14 +476,15 @@ systemctl restart networking
     2. [http://www.zh-cjh.com/wenzhangguilei/1164.html](http://www.zh-cjh.com/wenzhangguilei/1164.html)
 
 ##### 故障解决
+
 1. 解决由于公钥不可用，无法验证以下签名问题
     1. apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 40976EAXXXXXXXX
 2. 实验设备的运行目录/opt/unetlab/tmp/0/，每个实验都会将所有用到的设备文件复制到这个目录
 
-
-
 #### 思科路由器使用
+
 ##### 三大模式
+
 用户模式：设备开机后进入用户模式（Router>）">"表示用户模式
 
 特权模式：用户模式输入“enable”进入特权模式（Router#）"#"表示特权模式，disable退出特权模式，大部分查看命令需要特权模式
@@ -490,6 +492,7 @@ systemctl restart networking
 全局模式：特权模式输入"configure terminal"（Router(config)），exit退出全局模式，大部分写命令需要全局模式，特权模式下的命令前加 "do" ，就可以在全局模式下运行
 
 ##### 命令帮助
+
 tab： 直接补全命令
 
 <command>? ：列出命令补全列表 
@@ -497,6 +500,7 @@ tab： 直接补全命令
 ? ：显示命令提示，空格翻页， <cr>代表可以回车了
 
 ##### 常用命令
+
 ```plain
 路由器改名 全局模式下: hostname <name>
 
@@ -562,9 +566,8 @@ vlan改名 vlan模式下：name <vlan新名>
 全局模式下do <command> 可以执行特权模式的命令
 ```
 
-
-
 ##### telnet管理远程设备
+
 1. 只需要被控端设置即可
 2. 前提是网络必须要通
 3. 设置特权模式密码，才能在telnet中进入特权模式：R(config)# enable password my-pwd-enable
@@ -573,9 +576,8 @@ vlan改名 vlan模式下：name <vlan新名>
     2. 设置telnet密码：R(config-line)# password my-pwd-telnet
     3. 启用登录验证，要求用户登录时输入密码：R(config-line)# login
 
-
-
 ##### vlan配置
+
 背景：终端设备太多广播域太大，使用vlan划分广播域
 
 1. access链路
@@ -597,9 +599,8 @@ vlan改名 vlan模式下：name <vlan新名>
     2. 设置交换机接口模式为trunk：sw(config-if)#switchport mode trunk
     3. trunk模式接口允许交换机转发多个vlan的数据，解决了access链路只能承载一个vlan的问题。每个交换机都需要创建允许转发的vlan
 
-
-
 ##### 单臂路由
+
 多臂路由：路由器和交换机之间连接多条网线，每条网线对应一个vlan
 
 单臂路由：路由器和交换机之间连接一条网线（使用子接口替换有限的物理接口）
@@ -610,9 +611,8 @@ vlan改名 vlan模式下：name <vlan新名>
     2. 子接口收到一个带标签的数据，会摘掉自己所认识的标签；发送一个数据的时候，如果该数据不带标签，打上自己所认识的标签
 3. 路由器的物理接口只能配置一个IP地址：子接口可以配置IP地址，可以作为网关
 
-
-
 ##### 三层交换机
+
 背景：单臂路由需要经过路由器，使用三层交换机直接在交换机路由数据更方便
 
 SVI（switch virtual interface）：交换机虚拟接口（将多个接口逻辑成一个）
@@ -622,16 +622,13 @@ SVI（switch virtual interface）：交换机虚拟接口（将多个接口逻�
 3. SVI配置IP：ip address <ip> <mask>
 4. 仅仅有接口能传递当前vlan的数据的时候，SVI接口才会up
 
-
-
 三层交换机概念：
 
 1. 有IP处理能力，能配置一个以上的SVI接口的交换机就叫做三层交换机
 2. 某些二层交换机是可以配置SVI接口的，但是只能配置一个，通常是vlan1的SVI接口，一般用于配置IP地址进行telnet远程管理
 
-
-
 ##### DHCP配置
+
 1. 配置DHCP服务器
     1. 配置一个IP地址池：ip dhcp pool <pool name>
     2. 在IP地址池里配置一个IP地址段：network <网段> <掩码>
@@ -642,9 +639,8 @@ SVI（switch virtual interface）：交换机虚拟接口（将多个接口逻�
     1. 将PC获取地址的方式更改为自动获取（DHCP方式）：ip address dhcp
     2. 开启接口：no shutdown
 
-
-
 ##### NAT配置
+
 共有地址不能重复，私有地址可以在不同内网重复
 
 1. 静态NAT：一对一转换，一旦配置会立刻生成NAT表项
@@ -684,9 +680,8 @@ SVI（switch virtual interface）：交换机虚拟接口（将多个接口逻�
     4. 将ACL选出来的inside-local和外部接口做一个关联
         1. ip nat inside source list <acl name> interface e0/1 overload
 
-
-
 ##### ACL配置
+
 1. ACL（访问控制列表）：用于标记流量，允许或拒绝流量通过
     1. 对于一个路由器，假如收到一个数据
         1. 我应该把这个数据转发到哪？：查询路由表
@@ -694,10 +689,10 @@ SVI（switch virtual interface）：交换机虚拟接口（将多个接口逻�
         3. 我该怎么转发这个数据？：QoS，根据优先级入队
     2. ACL的表项是由上至下有序的逐条匹配，如果匹配上了，就不需要匹配了，如果都没匹配上，就默认拒绝
 
-
-
 ### Linux路由管理
+
 #### 路由管理
+
 Linux最多可以支持255张路由表，其中3张表是内置的
 
 + 表255本地路由表（Local table）：本地接口地址，广播地址，以及NAT地址都放在这个表，该路由表由系统自动维护，管理员不能修改
@@ -706,10 +701,7 @@ Linux最多可以支持255张路由表，其中3张表是内置的
 
 还有一张表0是保留的，在文件/etc/iproute2/rt_tables可以查看和配置路由表的TABLE_ID以及路由表名称
 
-
-
 > 查看路由信息
->
 
 格式：ip route show [table table_name]
 
@@ -727,55 +719,34 @@ default via 10.0.12.1 dev eth0 proto dhcp metric 100
 10.88.0.0/16 dev podman0 proto kernel scope link src 10.88.0.1
 ```
 
-
-
 > 添加路由
->
 
 格式：ip route add <目的网络CIDR | 目的主机> via <网关> dev <发送数据的网络接口> [table table_name]
 
-
-
 > 删除路由
->
 
 格式：ip route del <目的网络CIDR | 目的主机> via <网关> [table table_name]
 
-
-
 > 修改路由
->
 
 格式：ip route change/replace <目的网络CIDR | 目的主机> via <网关> [table table_name]
 
-
-
 > 查看指定网段内路由
->
 
 格式：ip route show root <CIDR> table <table_name>
 
-
-
 > 清空路由表
->
 
 格式：ip route flush table <table_name>
 
-
-
 > 路由持久化
->
 
 route和ip route命令的路由操作都是临时生效
 
 + 通过将路由信息写入/etc/sysconfig/network-scripts/route-<interfacename>实现持久化
 + 文件内容格式：<目的网络CIDR | 目的主机> via <网关> dev <发送数据的网络接口>
 
-
-
 > 接口地址配置
->
 
 接口添加IP地址：ip address add <CIDR> broadcast <广播地址> dev <网络接口>
 
@@ -783,15 +754,11 @@ route和ip route命令的路由操作都是临时生效
 
 查看IP地址：ip address show
 
-
-
 #### 策略路由
+
 不同IP包可以选择不同的路由表进行路由
 
-
-
 > 查看所有规则：ip rule list
->
 
 格式：优先级： 匹配条件 采取动作
 
@@ -804,10 +771,7 @@ route和ip route命令的路由操作都是临时生效
 32767:	from all lookup default
 ```
 
-
-
 > 添加自定义规则
->
 
 格式：ip rule add <from|to|tos|dev|fwmark> <value> table <table_name> [pref <优先级>][prohibit|reject|unreachable]
 
@@ -816,7 +780,6 @@ table：指明所使用的表，也可以使用lookup
 若不指定优先级，默认介于本地路由表和主路由表之间
 
 > 匹配条件
->
 
 + from：匹配来源地址
 + to：匹配目的地址
@@ -825,7 +788,6 @@ table：指明所使用的表，也可以使用lookup
 + fwmark：匹配防火墙MARK标记
 
 > 采取动作
->
 
 + nat：透明网关
 + prohibit：丢弃该包，并发送COMM.ADM.PROHIBIT的ICMP信息
@@ -840,10 +802,7 @@ ip rule add to 168.96.0.0/24 table 20
 ip rule add dev eth2 table 1  
 ```
 
-
-
 > 持久化
->
 
 ```plain
 echo "252 storage" >> /etc/iproute2/rt_tables
@@ -852,11 +811,9 @@ echo "ip route add default via 192.168.3.1 table storage" >> /etc/rc.local
 chmod +x /etc/rc.d/rc.local
 ```
 
-
-
 #### 旧的路由工具（route）
+
 > 查看路由信息
->
 
 格式：route -n （不加n会显示主机名，加上-n会显示具体IP地址）
 
@@ -877,27 +834,20 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 10.88.0.0       0.0.0.0         255.255.0.0     U     0      0        0 podman0
 ```
 
-
-
 > 添加路由
->
 
 route add -net <目的网络> netmask <掩码> gw <网关> dev <发送数据的网络接口>
 
 route add -host <目的主机> gw <网关> dev <网络接口>
 
-
-
 > 删除路由
->
 
 route del -host <目的主机> gw <网关>
 
 route del -net <目的网络> netmask <掩码> gw <网关>
 
-
-
 ### 参考资料
+
 [^1]: [IP定义RFC791](https://www.rfc-editor.org/rfc/rfc791.txt)
 
 [^2]: [TCP定义RFC793](https://www.rfc-editor.org/rfc/rfc793.txt)
@@ -915,4 +865,3 @@ route del -net <目的网络> netmask <掩码> gw <网关>
 [^8]: [eve-web连接wireshark抓包](https://www.802101.com/unetlab-and-wireshark-for-osx-update/)
 
 [^9]: [eve-ng中文社区](https://www.emulatedlab.com/)
-
